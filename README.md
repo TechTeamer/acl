@@ -3,13 +3,20 @@ ACL
 
 Access Control List Service
 
-##Install
+## Install
 
 ```
 npm i @techteamer/acl --save
 ```
 
-##Tests
+## How to use
+
+```
+const { ACLService } = require('@techteamer/acl')
+...
+```
+
+## Tests
 
 ```
 npm test
