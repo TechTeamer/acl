@@ -140,7 +140,49 @@ class AccessControlListService {
     this._resultCache.set(search, result)
     return result
   }
+  areAllowed (accessList, role) {
+    if (!(accessList instanceof Array)) {
+      Log.call(this, 'error', 'Access list is not an array (request rejected)')
+      return false
+    }
+    if (accessList.length === 0) return false
+    let access = accessList.sort().join('&').replace(/\s+/g, '')
+    let search = `${role}\\${access}`
+    if (this._resultCache.has(search)) {
+      return this._resultCache.get(search)
+    }
+    let result = true
+    for (let access of accessList) {
+      if (!this.isAllowed(access, role)) {
+        result = false
+        break
+      }
+    }
+    this._resultCache.set(search, result)
+    return result
+  }
+  areAnyAllowed (accessList, role) {
+    if (!(accessList instanceof Array)) {
+      Log.call(this, 'error', 'Access list is not an array (request rejected)')
+      return false
+    }
+    let access = accessList.sort().join('|').replace(/\s+/g, '')
+    let search = `${role}\\${access}`
+    if (this._resultCache.has(search)) {
+      return this._resultCache.get(search)
+    }
+    let result = false
+    for (let access of accessList) {
+      if (this.isAllowed(access, role)) {
+        result = true
+        break
+      }
+    }
+    this._resultCache.set(search, result)
+    return result
+  }
 }
+
 module.exports = {
   AccessControlListService,
   AccessControlListError

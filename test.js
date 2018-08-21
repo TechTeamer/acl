@@ -139,6 +139,30 @@ describe('ACL.isAllowed', function () {
   })
 })
 
+describe('ACL.areAllowed', function () {
+  it('Positive result on accept rules: [\'users.create\', \'users.delete\'] (admin)', function () {
+    assert.ok(ACL.areAllowed(['users.create', 'users.delete'], 'admin'))
+  })
+  it('Negative result on any reject rule: [\'users.create\', \'users.secret\'] (admin)', function () {
+    assert.ok(!ACL.areAllowed(['users.create', 'users.secret'], 'admin'))
+  })
+  it('Negative result on empty list', function () {
+    assert.ok(!ACL.areAllowed([], 'admin'))
+  })
+})
+
+describe('ACL.areAnyAllowed', function () {
+  it('Negative result on reject rules: [\'users.create\', \'users.delete\'] (supervisor)', function () {
+    assert.ok(!ACL.areAllowed(['users.create', 'users.delete'], 'supervisor'))
+  })
+  it('Positive result on any accept rule: [\'users.create\', \'users.secret\'] (admin)', function () {
+    assert.ok(ACL.areAnyAllowed(['users.create', 'users.secret'], 'admin'))
+  })
+  it('Negative result on empty list', function () {
+    assert.ok(!ACL.areAnyAllowed([], 'admin'))
+  })
+})
+
 describe('ACL.clearResultCache', function () {
   it('ACL result cache is an empty Map object', function () {
     ACL.clearResultCache()
