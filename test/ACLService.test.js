@@ -1,6 +1,6 @@
 const assert = require('assert')
-const {AccessControlListService, AccessControlListError} = require('./index')
-const ACL = new AccessControlListService()
+const {ACLService, ACLException} = require('./../index')
+const ACL = new ACLService()
 
 describe('Initial types and values', function () {
   it('ACL config cache is an empty Map object', function () {
@@ -8,9 +8,6 @@ describe('Initial types and values', function () {
   })
   it('ACL result cache is an empty Map object', function () {
     assert.ok(ACL._resultCache instanceof Map && ACL._resultCache.size === 0)
-  })
-  it('ACL use exceptions when error occurred (by default)', function () {
-    assert.ok(ACL.throws && AccessControlListError instanceof Object)
   })
 })
 
@@ -22,12 +19,12 @@ describe('ACL.createRole', function () {
   it('Create new role with same name throws an error', function () {
     assert.throws(function () {
       ACL.createRole('admin')
-    }, AccessControlListError)
+    }, ACLException)
   })
   it('Create new role with invalid name throws an error', function () {
     assert.throws(function () {
       ACL.createRole('@$admin')
-    }, AccessControlListError)
+    }, ACLException)
   })
 })
 
@@ -44,17 +41,17 @@ describe('ACL.createRule', function () {
   it('Create new rule with same description throws an error', function () {
     assert.throws(function () {
       ACL.createRule('users.create', 'admin')
-    }, AccessControlListError)
+    }, ACLException)
   })
   it('Create new rule with invalid name throws an error', function () {
     assert.throws(function () {
       ACL.createRule('users.@create', 'admin')
-    }, AccessControlListError)
+    }, ACLException)
   })
   it('Create new rule with missing role throws an error', function () {
     assert.throws(function () {
       ACL.createRule('users.create', 'inv')
-    }, AccessControlListError)
+    }, ACLException)
   })
   it('Create new accept rule with wildcard character: \'admin\\users.*\'', function () {
     assert.ok(ACL.createRule('users.*', 'admin'))
@@ -130,12 +127,12 @@ describe('ACL.isAllowed', function () {
   it('When role is missing throws an error: \'operator\\users.view\'', function () {
     assert.throws(function () {
       ACL.isAllowed('users.view', 'operator')
-    }, AccessControlListError)
+    }, ACLException)
   })
   it('When rule includes any wildcard character throws an error: \'admin\\users.*\'', function () {
     assert.throws(function () {
       ACL.isAllowed('users.*', 'admin')
-    }, AccessControlListError)
+    }, ACLException)
   })
 })
 

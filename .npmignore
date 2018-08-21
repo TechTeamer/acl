@@ -1,0 +1,6 @@
+test
+.idea
+.vscode
+.eslintrc.json
+.travis.yml
+yarn.lock
