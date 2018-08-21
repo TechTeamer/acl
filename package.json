@@ -1,0 +1,21 @@
+{
+  "name": "@techteamer/access-control-list",
+  "version": "0.0.1",
+  "description": "Access Control List Service (ACL)",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha --exit"
+  },
+  "keywords": [
+    "acl"
+  ],
+  "author": "TechTeamer",
+  "contributors": [
+    "Roland B. <roland.besnyi@techteamer.com>"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/TechTeamer/acl.git"
+  }
+}
