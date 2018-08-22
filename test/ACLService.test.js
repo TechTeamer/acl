@@ -1,5 +1,5 @@
 const assert = require('assert')
-const {ACLService, ACLException} = require('./../index')
+const {ACLService, ACLError} = require('./../index')
 const ACL = new ACLService()
 
 describe('Initial types and values', function () {
@@ -19,12 +19,12 @@ describe('ACL.createRole', function () {
   it('Create new role with same name throws an error', function () {
     assert.throws(function () {
       ACL.createRole('admin')
-    }, ACLException)
+    }, ACLError)
   })
   it('Create new role with invalid name throws an error', function () {
     assert.throws(function () {
       ACL.createRole('@$admin')
-    }, ACLException)
+    }, ACLError)
   })
 })
 
@@ -41,17 +41,17 @@ describe('ACL.createRule', function () {
   it('Create new rule with same description throws an error', function () {
     assert.throws(function () {
       ACL.createRule('users.create', 'admin')
-    }, ACLException)
+    }, ACLError)
   })
   it('Create new rule with invalid name throws an error', function () {
     assert.throws(function () {
       ACL.createRule('users.@create', 'admin')
-    }, ACLException)
+    }, ACLError)
   })
   it('Create new rule with missing role throws an error', function () {
     assert.throws(function () {
       ACL.createRule('users.create', 'inv')
-    }, ACLException)
+    }, ACLError)
   })
   it('Create new accept rule with wildcard character: \'admin\\users.*\'', function () {
     assert.ok(ACL.createRule('users.*', 'admin'))
@@ -127,12 +127,12 @@ describe('ACL.isAllowed', function () {
   it('When role is missing throws an error: \'operator\\users.view\'', function () {
     assert.throws(function () {
       ACL.isAllowed('users.view', 'operator')
-    }, ACLException)
+    }, ACLError)
   })
   it('When rule includes any wildcard character throws an error: \'admin\\users.*\'', function () {
     assert.throws(function () {
       ACL.isAllowed('users.*', 'admin')
-    }, ACLException)
+    }, ACLError)
   })
 })
 
@@ -148,15 +148,15 @@ describe('ACL.areAllowed', function () {
   })
 })
 
-describe('ACL.areAnyAllowed', function () {
+describe('ACL.anyAllowed', function () {
   it('Negative result on reject rules: [\'users.create\', \'users.delete\'] (supervisor)', function () {
-    assert.ok(!ACL.areAllowed(['users.create', 'users.delete'], 'supervisor'))
+    assert.ok(!ACL.anyAllowed(['users.create', 'users.delete'], 'supervisor'))
   })
   it('Positive result on any accept rule: [\'users.create\', \'users.secret\'] (admin)', function () {
-    assert.ok(ACL.areAnyAllowed(['users.create', 'users.secret'], 'admin'))
+    assert.ok(ACL.anyAllowed(['users.create', 'users.secret'], 'admin'))
   })
   it('Negative result on empty list', function () {
-    assert.ok(!ACL.areAnyAllowed([], 'admin'))
+    assert.ok(!ACL.anyAllowed([], 'admin'))
   })
 })
 

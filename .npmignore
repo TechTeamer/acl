@@ -1,6 +1,6 @@
 test
 .idea
 .vscode
-.eslintrc.json
 .travis.yml
+.eslintrc.json
 yarn.lock

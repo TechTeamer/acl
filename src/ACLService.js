@@ -1,4 +1,4 @@
-const ACLException = require('./ACLException')
+const ACLError = require('./ACLError')
 
 class ACLService {
   constructor () {
@@ -162,7 +162,7 @@ class ACLService {
     return result
   }
 
-  areAnyAllowed (accessList, role) {
+  anyAllowed (accessList, role) {
     if (!(accessList instanceof Array)) {
       this._log('error', 'Access list is not an array (request rejected)')
       return false
@@ -191,7 +191,7 @@ class ACLService {
       this.logger(message, level)
     }
     if (level === 'error') {
-      throw new ACLException(message)
+      throw new ACLError(message)
     }
   }
 }

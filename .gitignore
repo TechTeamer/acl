@@ -1,7 +1,6 @@
 node_modules
 .idea
 .vscode
-.eslintrc.json
 .travis.yml
 yarn.lock
 package-lock.json
