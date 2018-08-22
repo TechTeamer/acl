@@ -4,10 +4,13 @@ ACL
 Access Control List Service
 
 * [Install](#install)
-* [How to use](#how-to-use)
-* [Rules](#rules)
-* [Methods](#methods)
-* [Tests](#tests)
+* [How to](#how-to)
+  * [Define rules](#define-rules)
+  * [Create rules](#create-rules)
+  * [Import rules](#import-rules)
+  * [Setup logging](#setup-logging)
+* [Public methods](#public-methods)
+* [Unit tests](#unit-tests)
 
 
 ## Install
@@ -16,7 +19,31 @@ Access Control List Service
 $ npm i @techteamer/acl --save
 ```
 
-## How to use
+## How to
+
+### Define rules
+
+__All reject rules higher than any accept rule!__
+
+Start your rule without any flag to create an accept rule
+
+```
+accept.rule
+```
+
+Start your rule with `!` flag to create a reject rule
+
+```
+!reject.rule
+```
+
+Start your role or rule with `@` flag to ignore it
+
+```
+@ignored.rule
+```
+
+### Create rules
 
 ```js
 const { ACLService } = require('@techteamer/acl')
@@ -34,9 +61,14 @@ acl.createRule('users.create', 'admin')
 acl.isAllowed('users.create', 'admin')
 ```
 
-### Import roles
+### Import rules
 
 ```js
+const { ACLService } = require('@techteamer/acl')
+
+// create ACL instance
+const acl = new ACLService()
+
 // import roles and rules
 acl.import({
   "admin":[
@@ -62,7 +94,7 @@ acl.isAllowed('users.create', 'supervisor')
 acl.isAllowed('users.delete', 'supervisor')
 ```
 
-### Logging
+### Setup logging
 
 __Logging disabled by default! ( `acl.logger = false` )__
 
@@ -89,33 +121,11 @@ acl.logger = {
 }
 ```
 
-## Rules
-
-__All reject rules higher than any accept rule!__
-
-Start your rule without any flag to create an accept rule
-
-```
-accept.rule
-```
-
-Start your rule with `!` flag to create a reject rule
-
-```
-!reject.rule
-```
-
-Start your role or rule with `@` flag to ignore it
-
-```
-@ignored.rule
-```
-
-## Methods
+## Public methods
 
 ### import( settings )
 
-Import roles and rules as an object. Import is an append based method, if you want to overwrite previous rules, first use the `clear` method. After import completed, result cache automatically cleared.
+Import roles and rules as an object. Import is an append based method, if you want to overwrite previous rules, first use the [`clear`](#clear-) method. After import completed, result cache automatically cleared.
 
 __Arguments__
 
@@ -202,7 +212,7 @@ Clear all results from result cache.
 
 Clear all roles, rules and results from ACL instance.
 
-## Tests
+## Unit tests
 
 To run the test suite, first install the dependencies, then run the test:
 
