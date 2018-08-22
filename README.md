@@ -69,70 +69,114 @@ acl.isAllowed('users.delete', 'supervisor')
 
 Start your rule without any flag to create an accept rule
 
-```accept.rule```
+```
+accept.rule
+```
 
 Start your rule with `!` flag to create a reject rule
 
-```!reject.rule```
+```
+!reject.rule
+```
 
 Start your role or rule with `@` flag to ignore it
 
-```@ignored.rule```
+```
+@ignored.rule
+```
 
 ## Methods
 
-### import(object)
+### import( settings )
 
 Import roles and rules as an object. Import is an append based method, if you want to overwrite previous rules, first use the `clear` method. After import completed, result cache automatically cleared.
 
-### createRole(name)
+__Arguments__
 
-`name` : `<string>`
+```js
+settings {Object} {
+  role {String}: rules {Array},
+  ...
+}
+```
+---
+
+### createRole( name )
 
 Create a single role.\
 Throws an `ACLError` when role already exists.
 
-### createRule(name, role)
+__Arguments__
 
-`name` : `<string>`\
-`role` : `<string>`
+```js
+name   {String} Role name.
+```
+---
+
+### createRule( name, role )
 
 Create a single accept or reject rule. After rule created, result cache automatically cleared.\
-Throws an `ACLError` when rule already exists in provided role.
+Throws an `ACLError` when rule already exists in provided role or role not exists.
 
-### hasRole(name)
+__Arguments__
 
-`name` : `<string>`
+```js
+name   {String} Rule name.
+role   {String} Role name.
+```
+---
+
+### hasRole( name )
 
 Returns with true, when role exists, otherwise false.
 
-### isAllowed(access, role)
+__Arguments__
 
-`access` : `<string>`\
-`role` : `<string>`
+```js
+name   {String} Role name.
+```
+---
 
-Returns with true, when access accepted, otherwise false. All results are stored in the result cache!\
+### isAllowed( rule, role )
+
+Returns with true, when rule accepted, otherwise false. All results are stored in the result cache!\
 Throws an `ACLError` when role not exists.
 
-### areAllowed(accesslist, role)
+__Arguments__
 
-`accesslist` : `<array>`\
-`role` : `<string>`
+```js
+rule   {String} Rule name.
+role   {String} Role name.
+```
+---
 
-Returns with true, when all access accepted, otherwise false. If access list is empty, returns false. All results are stored in the result cache! Throws an `ACLError` when role not exists.
+### areAllowed( rules, role )
 
-### anyAllowed(accesslist, role)
+Returns with true, when all rule accepted, otherwise false. If access list is empty, returns false. All results are stored in the result cache! Throws an `ACLError` when role not exists.
 
-`accesslist` : `<array>`\
-`role` : `<string>`
+```js
+rules  {Array} Rule names.
+role   {String} Role name.
+```
+---
 
-Returns with true, when any access accepted, otherwise false. If access list is empty, returns false. All results are stored in the result cache! Throws an `ACLError` when role not exists.
+### anyAllowed( rules, role )
 
-### clearResultCache()
+Returns with true, when any rule accepted, otherwise false. If access list is empty, returns false. All results are stored in the result cache! Throws an `ACLError` when role not exists.
+
+```js
+rules  {Array} Rule names.
+role   {String} Role name.
+```
+---
+
+### clearResultCache( )
 
 Clear all results from result cache.
 
-### clear()
+---
+
+### clear( )
 
 Clear all roles, rules and results from ACL instance.
 
