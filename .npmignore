@@ -3,4 +3,5 @@ test
 .vscode
 .travis.yml
 .eslintrc.json
+.eslintignore
 yarn.lock
