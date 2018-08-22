@@ -60,12 +60,38 @@ acl.isAllowed('users.create', 'supervisor')
 
 // returns false *
 acl.isAllowed('users.delete', 'supervisor')
+```
 
+### Logging
+
+__Logging disabled by default! ( `acl.logger = false` )__
+
+Single callback as logger
+
+```js
+acl.logger = function(level, message){
+  // available log levels:
+  //  - debug: verbose process messages
+  //  - info: general informations
+  //  - warn: warning messages (not critical)
+  //  - error: error messages (critical)
+  ...
+}
+```
+
+Object (or any class instance) with public methods
+
+```js
+acl.logger = {
+  info: function(message){ ... },
+  warn: function(message){ ... },
+  ...
+}
 ```
 
 ## Rules
 
-**All reject rules higher than any accept rule! \***
+__All reject rules higher than any accept rule!__
 
 Start your rule without any flag to create an accept rule
 
@@ -99,7 +125,6 @@ settings {Object} {
   ...
 }
 ```
----
 
 ### createRole( name )
 
@@ -111,7 +136,6 @@ __Arguments__
 ```js
 name   {String} Role name.
 ```
----
 
 ### createRule( name, role )
 
@@ -124,7 +148,6 @@ __Arguments__
 name   {String} Rule name.
 role   {String} Role name.
 ```
----
 
 ### hasRole( name )
 
@@ -135,7 +158,6 @@ __Arguments__
 ```js
 name   {String} Role name.
 ```
----
 
 ### isAllowed( rule, role )
 
@@ -148,33 +170,33 @@ __Arguments__
 rule   {String} Rule name.
 role   {String} Role name.
 ```
----
 
 ### areAllowed( rules, role )
 
 Returns with true, when all rule accepted, otherwise false. If access list is empty, returns false. All results are stored in the result cache! Throws an `ACLError` when role not exists.
 
+__Arguments__
+
 ```js
 rules  {Array} Rule names.
 role   {String} Role name.
 ```
----
 
 ### anyAllowed( rules, role )
 
 Returns with true, when any rule accepted, otherwise false. If access list is empty, returns false. All results are stored in the result cache! Throws an `ACLError` when role not exists.
 
+__Arguments__
+
 ```js
 rules  {Array} Rule names.
 role   {String} Role name.
 ```
----
 
 ### clearResultCache( )
 
 Clear all results from result cache.
 
----
 
 ### clear( )
 

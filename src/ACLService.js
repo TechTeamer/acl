@@ -43,6 +43,7 @@ class ACLService {
     }
 
     this._ruleCache.set(role, {accept: [], reject: []})
+    this._log('debug', `Role created: ${role}`)
     return true
   }
 
@@ -74,8 +75,8 @@ class ACLService {
         }
       }
       ruleTarget.push(ruleRegExp)
+      this._log('debug', `Rule created: ${role}\\${rule}`)
       if (!this._importInProgress) {
-        this._log('info', `New rule created: ${role}\\${rule}`)
         this.clearResultCache()
       }
       return true
@@ -115,13 +116,18 @@ class ACLService {
       this._log('error', `Invalid character in access parameter: ${role}\\${access}`)
       return false
     }
-
     access = access.replace(/\s+/g, '')
     let search = `${role}\\${access}`
-    if (this._resultCache.has(search)) {
-      return this._resultCache.get(search)
-    }
     let result = false
+    if (this._resultCache.has(search)) {
+      result = this._resultCache.get(search)
+      if (result) {
+        this._log('debug', `Rule accepted: ${role}\\${access} (from cache)`)
+      } else {
+        this._log('debug', `Rule declined: ${role}\\${access} (from cache)`)
+      }
+      return result
+    }
     for (let rule of this._ruleCache.get(role).accept) {
       if (rule.test(access)) {
         result = true
@@ -137,6 +143,11 @@ class ACLService {
       }
     }
     this._resultCache.set(search, result)
+    if (result) {
+      this._log('debug', `Rule accepted: ${role}\\${access}`)
+    } else {
+      this._log('debug', `Rule declined: ${role}\\${access}`)
+    }
     return result
   }
 
@@ -148,10 +159,16 @@ class ACLService {
     if (accessList.length === 0) return false
     let access = accessList.sort().join('&').replace(/\s+/g, '')
     let search = `${role}\\${access}`
-    if (this._resultCache.has(search)) {
-      return this._resultCache.get(search)
-    }
     let result = true
+    if (this._resultCache.has(search)) {
+      result = this._resultCache.get(search)
+      if (result) {
+        this._log('debug', `Rule accepted: ${role}\\${access} (from cache)`)
+      } else {
+        this._log('debug', `Rule declined: ${role}\\${access} (from cache)`)
+      }
+      return result
+    }
     for (let access of accessList) {
       if (!this.isAllowed(access, role)) {
         result = false
@@ -159,6 +176,11 @@ class ACLService {
       }
     }
     this._resultCache.set(search, result)
+    if (result) {
+      this._log('debug', `Rule accepted: ${role}\\${access}`)
+    } else {
+      this._log('debug', `Rule declined: ${role}\\${access}`)
+    }
     return result
   }
 
@@ -169,10 +191,16 @@ class ACLService {
     }
     let access = accessList.sort().join('|').replace(/\s+/g, '')
     let search = `${role}\\${access}`
-    if (this._resultCache.has(search)) {
-      return this._resultCache.get(search)
-    }
     let result = false
+    if (this._resultCache.has(search)) {
+      result = this._resultCache.get(search)
+      if (result) {
+        this._log('debug', `Rule accepted: ${role}\\${access} (cached)`)
+      } else {
+        this._log('debug', `Rule declined: ${role}\\${access} (cached)`)
+      }
+      return result
+    }
     for (let access of accessList) {
       if (this.isAllowed(access, role)) {
         result = true
@@ -180,6 +208,11 @@ class ACLService {
       }
     }
     this._resultCache.set(search, result)
+    if (result) {
+      this._log('debug', `Rule accepted: ${role}\\${access}`)
+    } else {
+      this._log('debug', `Rule declined: ${role}\\${access}`)
+    }
     return result
   }
 
@@ -188,7 +221,7 @@ class ACLService {
       this.logger[level] instanceof Function) {
       this.logger[level](message)
     } else if (this.logger instanceof Function) {
-      this.logger(message, level)
+      this.logger(level, message)
     }
     if (level === 'error') {
       throw new ACLError(message)
