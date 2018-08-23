@@ -5,3 +5,4 @@ test
 .eslintrc.json
 .eslintignore
 yarn.lock
+npm-debug.log
