@@ -131,11 +131,6 @@ describe('ACL.isAllowed', function () {
   it('Negative result if no rules match: \'supervisor\\users.delete\'', function () {
     assert.ok(!ACL.isAllowed('users.delete', 'supervisor'))
   })
-  it('When role is missing throws an error: \'operator\\users.view\'', function () {
-    assert.throws(function () {
-      ACL.isAllowed('users.view', 'operator')
-    }, ACLError)
-  })
   it('When rule includes any wildcard character throws an error: \'admin\\users.*\'', function () {
     assert.throws(function () {
       ACL.isAllowed('users.*', 'admin')

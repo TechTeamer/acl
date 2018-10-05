@@ -105,15 +105,15 @@ class ACLService {
 
   isAllowed (access, role) {
     if (typeof access !== 'string' || access.length === 0) {
-      this._log('error', 'Access argument is required (request rejected)')
+      this._log('warn', `Missing access argument: isAllowed() resolves to false`)
       return false
     }
     if (typeof role !== 'string' || access.length === 0) {
-      this._log('error', 'Role argument is required (request rejected)')
+      this._log('warn', `Missing role argument: isAllowed(${access}) resolves to false`)
       return false
     }
     if (!this._ruleCache.has(role)) {
-      this._log('error', `Role not found: ${role}`)
+      this._log('warn', `Role not found: '${role}' not in ${this.roleList}`)
       return false
     }
     if (!/^[a-z0-9-._]+$/i.test(access)) {
