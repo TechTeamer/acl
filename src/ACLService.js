@@ -99,6 +99,10 @@ class ACLService {
     }
   }
 
+  get roleList () {
+    return [...this._ruleCache.keys()]
+  }
+
   isAllowed (access, role) {
     if (typeof access !== 'string' || access.length === 0) {
       this._log('error', 'Access argument is required (request rejected)')

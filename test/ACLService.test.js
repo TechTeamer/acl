@@ -28,6 +28,13 @@ describe('ACL.createRole', function () {
   })
 })
 
+describe('ACL.roleList', function () {
+  it('List available roles', function () {
+    assert.ok(Array.isArray(ACL.roleList))
+    assert.ok(Array.isArray(ACL.roleList))
+  })
+})
+
 describe('ACL.createRule', function () {
   it('Create new accept rule then check it: \'admin\\users.create\'', function () {
     assert.ok(ACL.createRule('users.create', 'admin'))
