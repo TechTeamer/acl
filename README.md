@@ -169,6 +169,10 @@ __Arguments__
 name   {String} Role name.
 ```
 
+### get roleList
+
+Returns the list of available roles as a string array.
+
 ### isAllowed( rule, role )
 
 Returns with true, when rule accepted, otherwise false. All results are stored in the result cache!\
