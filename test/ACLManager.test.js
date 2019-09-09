@@ -78,6 +78,15 @@ describe('ACLManager.roleList', function () {
   })
 })
 
+describe('ACL.hasRole', function () {
+  it('Positive result when role exists: \'admin\'', function () {
+    assert.ok(acm.hasRole('admin'))
+  })
+  it('Negative result when role not exists: \'missingRole\'', function () {
+    assert.ok(!acm.hasRole('missingRole'))
+  })
+})
+
 describe('ACLManager.getACLForRole', function () {
   it('Finds existing role', function () {
     assert.ok(acm.getACLForRole('admin') instanceof ACLService)

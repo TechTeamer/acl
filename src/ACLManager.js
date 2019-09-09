@@ -44,6 +44,10 @@ class ACLManager {
     return Array.from(new Set([].concat(...this.aclList.map(acl => acl.roleList))))
   }
 
+  hasRole (role) {
+    return this.roleList.includes(role)
+  }
+
   getACLForRole (role) {
     for (let acl of this.aclList) {
       if (acl.roleList.includes(role)) {
