@@ -55,7 +55,7 @@ class ACLManager {
       }
     }
 
-    return false
+    return null
   }
 
   isAllowed (access, role) {
