@@ -1,16 +1,24 @@
-ACL
+The ACL Package
 =============
 
-Access Control List Service
-
 * [Install](#install)
-* [How to](#how-to)
+* [Usage options](#usage-options)
+* [ACLService](#aclservice)
   * [Define rules](#define-rules)
   * [Create rules](#create-rules)
   * [Import rules](#import-rules)
   * [Setup logging](#setup-logging)
-* [Public methods](#public-methods)
+  * [Public methods](#public-methods)
+* [ACLManager](#aclmanager)
+  * [Import ACLService](#import-aclservice)
+  * [Import ACL config](#import-acl-config)
+  * [Checking roles and rules](#checking-roles-and-rules)
+    * [Usage example](#usage-example)
+  * [Setup logging](#setup-logging-1)
+  * [Public methods](#public-methods-1)
 * [Unit tests](#unit-tests)
+
+
 
 
 ## Install
@@ -19,7 +27,27 @@ Access Control List Service
 $ npm i @techteamer/acl --save
 ```
 
-## How to
+## Usage options
+
+After installing the package there are two ways you can use it.
+
+### Single ACL usage
+You can use a single ACLService instance to handle your rules and roles in a single list.
+
+### Multiple ACL usage
+You can use an ACLManager to handle multiple ACLService instances.
+In this case there is a priority between the ACLs added to the manager.
+The ACL which was added later takes precedence over the previously added ones.
+
+An other way of saying this is: you can override the ACLs by adding newer lists but
+if the role you are looking for cannot be found in the ACL with the highest priority
+the manager will fallback to the ACLs with lower priority.
+
+> **WARNING!** If the ACLManager found the role in the first ACL list it will not fallback to lower priority ACLs
+> even if the higher priority one do not have the rule you were looking for.
+
+
+## ACLService
 
 ### Define rules
 
@@ -216,9 +244,160 @@ Clear all results from result cache.
 
 Clear all roles, rules and results from ACL instance.
 
+## ACLManager
+
+### Import ACLService
+
+```js
+const { ACLManager, ACLService } = require('@techteamer/acl')
+
+// create ACL instance
+const acl = new ACLService()
+
+// import roles and rules to ACLService
+acl.import({
+  "admin":[
+    "users.*",
+    "system.*"
+  ],
+  "supervisor":[
+    "users.*",
+    "!users.delete",
+    "system.*",
+    "!system.shutdown",
+    "@ignored"
+  ],
+  "@ignored":[
+    "users.list"
+  ]
+})
+
+// Import ACLService to ACLManager:
+const acm = new ACLManager()
+acm.import(acl)
+
+// Use the ACLManager instead of the ACLService
+// returns true
+acm.isAllowed('users.create', 'supervisor')
+
+// returns false
+acm.isAllowed('users.delete', 'supervisor')
+```
+
+### Import ACL config
+
+```js
+const { ACLManager } = require('@techteamer/acl')
+
+// Import ACL config directly into the ACLManager:
+const acm = new ACLManager()
+acm.importConfig({
+  "admin":[
+    "users.*",
+    "system.*"
+  ],
+  "supervisor":[
+    "users.*",
+    "!users.delete",
+    "system.*",
+    "!system.shutdown",
+    "@ignored"
+  ],
+  "@ignored":[
+    "users.list"
+  ]
+})
+
+// Use the ACLManager instead of the ACLService
+// returns true
+acm.isAllowed('users.create', 'supervisor')
+
+// returns false
+acm.isAllowed('users.delete', 'supervisor')
+```
+### Checking roles and rules
+
+To check for roles and rules you can use the same methods:
+- `isAllowed(rule, role)`
+- `areAllowed(rules, role)`
+- `anyAllowed(rules, role)`
+
+#### Usage example:
+```js
+const { ACLManager } = require('@techteamer/acl')
+
+// Import ACL config directly into the ACLManager:
+const acm = new ACLManager()
+// Lower priority
+acm.importConfig({
+  "admin":[
+    // Any rule listed here will be ignored...
+    "system.shutdown"
+  ],
+  "supervisor":[
+    // Every 'supervisor' role check will fallback to this rule list:
+    "users.*",
+    "!users.delete"
+  ]
+})
+
+// Higher priority (added later)
+acm.importConfig({
+  "admin":[
+    // Rules here will take precedence over the ones listed in the first ACL config's 'admin' role section.
+    "users.*",
+  ]
+})
+
+// returns true
+acm.isAllowed('users.create', 'supervisor') // Fallback
+acm.isAllowed('users.delete', 'admin') // No fallback
+
+// returns false
+acm.isAllowed('users.delete', 'supervisor') // Fallback
+acm.isAllowed('system.shutdown', 'admin') // No fallback!!! Only rule in admin role is: 'users.*'
+
+```
+
+### Setup logging
+
+__Logging disabled by default!__
+
+> **NOTE:** The logger will be set to all managed ACLService instances as well!
+
+Single callback as logger
+
+```js
+acm.logger = function(level, message) {
+  // available log levels:
+  //  - debug: verbose process messages
+  //  - info: general informations
+  //  - warn: warning messages (not critical)
+  //  - error: error messages (critical)
+  ...
+}
+```
+
+Object (or any class instance) with public methods
+
+```js
+acm.logger = {
+  info: function(message){ ... },
+  warn: function(message){ ... },
+  ...
+}
+```
+
+## Public methods
+
+The ACL manager has the same API as the ACLService except these methods:
+- `createRole`
+- `createRule`
+- `clearResultCache`
+
 ## Unit tests
 
-To run the test suite, first install the dependencies, then run the test:
+To run the test suites, first install the dependencies, then run the tests:
 
 ```
 $ npm install
