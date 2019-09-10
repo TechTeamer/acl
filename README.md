@@ -13,6 +13,7 @@ The ACL Package
   * [Import ACLService](#import-aclservice)
   * [Import ACL config](#import-acl-config)
   * [Checking roles and rules](#checking-roles-and-rules)
+    * [Usage example](#usage-example)
   * [Setup logging](#setup-logging-1)
   * [Public methods](#public-methods-1)
 * [Unit tests](#unit-tests)
