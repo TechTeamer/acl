@@ -89,10 +89,6 @@ class ACLManager {
   }
 
   clear () {
-    for (const acl of this.aclList) {
-      acl.clear()
-    }
-
     this.aclList = []
   }
 
