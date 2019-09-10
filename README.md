@@ -4,17 +4,17 @@ The ACL Package
 * [Install](#install)
 * [Usage options](#usage-options)
 * [ACLService](#aclservice)
-  * Define rules
-  * Create rules
-  * Import rules
-  * Setup logging
-  * Public methods
+  * [Define rules](#define-rules)
+  * [Create rules](#create-rules)
+  * [Import rules](#import-rules)
+  * [Setup logging](#setup-logging)
+  * [Public methods](#public-methods)
 * [ACLManager](#aclmanager)
-  * Import ACLService
-  * Import ACL config
-  * Checking roles and rules
-  * Setup logging
-  * Public methods
+  * [Import ACLService](#import-aclservice)
+  * [Import ACL config](#import-acl-config)
+  * [Checking roles and rules](#checking-roles-and-rules)
+  * [Setup logging](#setup-logging-1)
+  * [Public methods](#public-methods-1)
 * [Unit tests](#unit-tests)
 
 
