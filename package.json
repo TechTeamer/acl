@@ -1,6 +1,6 @@
 {
   "name": "@techteamer/acl",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Access Control List (ACL)",
   "main": "index.js",
   "scripts": {
@@ -13,7 +13,8 @@
   ],
   "author": "TechTeamer",
   "contributors": [
-    "Roland B. <roland.besnyi@techteamer.com>"
+    "Roland B. <roland.besnyi@techteamer.com>",
+    "Bence Tihanyi <bence.tihanyi@techteamer.com>"
   ],
   "license": "MIT",
   "repository": {
