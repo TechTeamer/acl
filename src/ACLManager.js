@@ -88,6 +88,14 @@ class ACLManager {
     return acl.anyAllowed(accessList, role)
   }
 
+  clear () {
+    for (const acl of this.aclList) {
+      acl.clear()
+    }
+
+    this.aclList = []
+  }
+
   _log (level, message) {
     if (this.log instanceof Object && this.log[level] instanceof Function) {
       this.log[level](message)

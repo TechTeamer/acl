@@ -155,3 +155,10 @@ describe('ACLManager.anyAllowed', function () {
     assert.ok(!acm.anyAllowed([], 'admin'))
   })
 })
+
+describe('ACLManager.clear', function () {
+  it('Clears ACL instances from manager', function () {
+    acm.clear()
+    assert.ok(acm.aclList.length === 0)
+  })
+})
