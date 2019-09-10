@@ -98,7 +98,7 @@ describe('ACLManager.getACLForRole', function () {
     assert.ok(acm.getACLForRole('supervisor') === acl1)
   })
   it('Returns false if the role is missing', function () {
-    assert.ok(acm.getACLForRole('missingRole') === false)
+    assert.ok(acm.getACLForRole('missingRole') === null)
   })
 })
 
