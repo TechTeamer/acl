@@ -1,6 +1,6 @@
 {
   "name": "@techteamer/acl",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Access Control List (ACL)",
   "main": "index.js",
   "scripts": {
