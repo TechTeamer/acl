@@ -113,6 +113,9 @@ describe('ACL.import', function () {
       }
     }(), 'Created rule not found as a regular expression')
   })
+  it('Import throw error on duplicate rules', function () {
+      ACL.import({"supervisor": ["users.create", "users.secret", "users.create"]})
+  })
 })
 
 describe('ACL.isAllowed', function () {
