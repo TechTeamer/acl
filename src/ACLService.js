@@ -18,7 +18,21 @@ class ACLService {
       if (!this.hasRole(role)) {
         this.createRole(role)
       }
-      for (let rule of configJSON[role].sort()) {
+
+      const rules = [...new Set(configJSON[role].sort())]
+      if (rules.length !== configJSON[role].length) {
+        let duplicates = [...configJSON[role]]
+        rules.forEach(item => {
+          const i = duplicates.indexOf(item)
+          duplicates = duplicates
+            .slice(0, i)
+            .concat(duplicates.slice(i + 1, duplicates.length))
+        })
+
+        this._log('error', `Role '${role}' has duplicate rules: ${duplicates}`)
+      }
+
+      for (let rule of rules) {
         if (rule[0] === '@') {
           this._log('warn', `Rule ignored: ${role}\\${rule.substr(1)}`)
           continue
