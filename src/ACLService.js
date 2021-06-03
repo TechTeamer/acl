@@ -19,16 +19,10 @@ class ACLService {
         this.createRole(role)
       }
 
-      const rules = [...new Set(configJSON[role].sort())]
-      if (rules.length !== configJSON[role].length) {
-        let duplicates = [...configJSON[role]]
-        rules.forEach(item => {
-          const i = duplicates.indexOf(item)
-          duplicates = duplicates
-            .slice(0, i)
-            .concat(duplicates.slice(i + 1, duplicates.length))
-        })
+      const rules = configJSON[role]
+      const duplicates = rules.filter((item, index) => rules.indexOf(item) !== index)
 
+      if (duplicates.length > 0) {
         this._log('error', `Role '${role}' has duplicate rules: ${duplicates}`)
       }
 
