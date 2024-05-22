@@ -1,2 +1,3 @@
-class ACLError extends Error {}
-module.exports = ACLError
+class ACLError extends Error { }
+
+export default ACLError
