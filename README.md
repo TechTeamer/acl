@@ -395,6 +395,12 @@ The ACL manager has the same API as the ACLService except these methods:
 - `createRule`
 - `clearResultCache`
 
+## Build
+
+```
+yarn run build
+```
+
 ## Unit tests
 
 To run the test suites, first install the dependencies, then run the tests:

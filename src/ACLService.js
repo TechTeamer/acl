@@ -1,5 +1,4 @@
-const ACLError = require('./ACLError')
-
+import ACLError from './ACLError.js'
 class ACLService {
   constructor () {
     this.logger = false
@@ -10,7 +9,7 @@ class ACLService {
 
   import (configJSON) {
     this._importInProgress = true
-    for (let role of Object.keys(configJSON)) {
+    for (const role of Object.keys(configJSON)) {
       if (role[0] === '@') {
         this._log('warn', `Role ignored: ${role.substr(1)}`)
         continue
@@ -26,7 +25,7 @@ class ACLService {
         this._log('error', `Role '${role}' has duplicate rules: ${duplicates}`)
       }
 
-      for (let rule of rules) {
+      for (const rule of rules) {
         if (rule[0] === '@') {
           this._log('warn', `Rule ignored: ${role}\\${rule.substr(1)}`)
           continue
@@ -50,7 +49,7 @@ class ACLService {
       return false
     }
 
-    this._ruleCache.set(role, {accept: [], reject: []})
+    this._ruleCache.set(role, { accept: [], reject: [] })
     this._log('debug', `Role created: ${role}`)
     return true
   }
@@ -70,14 +69,13 @@ class ACLService {
     }
 
     try {
-      let rejectRule = rule[0] === '!'
-      let ruleTarget = rejectRule
+      const rejectRule = rule[0] === '!'
+      const ruleTarget = rejectRule
         ? this._ruleCache.get(role).reject
         : this._ruleCache.get(role).accept
-      let expRule = rejectRule ? rule.substr(1) : rule
-      let ruleRegExp = new RegExp('^' + expRule.replace('.', '\\.').replace('*', '.*') + '$', 'i')
-
-      for (let storedRule of ruleTarget) {
+      const expRule = rejectRule ? rule.substr(1) : rule
+      const ruleRegExp = new RegExp('^' + expRule.replace('.', '\\.').replace('*', '.*') + '$', 'i')
+      for (const storedRule of ruleTarget) {
         if (storedRule.toString() === ruleRegExp.toString()) {
           throw new Error('rule already exists')
         }
@@ -113,7 +111,7 @@ class ACLService {
 
   isAllowed (access, role) {
     if (typeof access !== 'string' || access.length === 0) {
-      this._log('warn', `Missing access argument: isAllowed() resolves to false`)
+      this._log('warn', 'Missing access argument: isAllowed() resolves to false')
       return false
     }
     if (typeof role !== 'string' || access.length === 0) {
@@ -129,7 +127,7 @@ class ACLService {
       return false
     }
     access = access.replace(/\s+/g, '')
-    let search = `${role}\\${access}`
+    const search = `${role}\\${access}`
     let result = false
     if (this._resultCache.has(search)) {
       result = this._resultCache.get(search)
@@ -140,14 +138,14 @@ class ACLService {
       }
       return result
     }
-    for (let rule of this._ruleCache.get(role).accept) {
+    for (const rule of this._ruleCache.get(role).accept) {
       if (rule.test(access)) {
         result = true
         break
       }
     }
     if (result) {
-      for (let rule of this._ruleCache.get(role).reject) {
+      for (const rule of this._ruleCache.get(role).reject) {
         if (rule.test(access)) {
           result = false
           break
@@ -168,9 +166,11 @@ class ACLService {
       this._log('error', 'Access list is not an array (request rejected)')
       return false
     }
-    if (accessList.length === 0) return false
-    let access = accessList.sort().join('&').replace(/\s+/g, '')
-    let search = `${role}\\${access}`
+    if (accessList.length === 0) {
+      return false
+    }
+    const access = accessList.sort().join('&').replace(/\s+/g, '')
+    const search = `${role}\\${access}`
     let result = true
     if (this._resultCache.has(search)) {
       result = this._resultCache.get(search)
@@ -181,7 +181,7 @@ class ACLService {
       }
       return result
     }
-    for (let access of accessList) {
+    for (const access of accessList) {
       if (!this.isAllowed(access, role)) {
         result = false
         break
@@ -201,8 +201,8 @@ class ACLService {
       this._log('error', 'Access list is not an array (request rejected)')
       return false
     }
-    let access = accessList.sort().join('|').replace(/\s+/g, '')
-    let search = `${role}\\${access}`
+    const access = accessList.sort().join('|').replace(/\s+/g, '')
+    const search = `${role}\\${access}`
     let result = false
     if (this._resultCache.has(search)) {
       result = this._resultCache.get(search)
@@ -213,7 +213,7 @@ class ACLService {
       }
       return result
     }
-    for (let access of accessList) {
+    for (const access of accessList) {
       if (this.isAllowed(access, role)) {
         result = true
         break
@@ -230,7 +230,7 @@ class ACLService {
 
   _log (level, message) {
     if (this.logger instanceof Object &&
-      this.logger[level] instanceof Function) {
+            this.logger[level] instanceof Function) {
       this.logger[level](message)
     } else if (this.logger instanceof Function) {
       this.logger(level, message)
@@ -240,5 +240,4 @@ class ACLService {
     }
   }
 }
-
-module.exports = ACLService
+export default ACLService

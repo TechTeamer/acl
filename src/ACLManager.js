@@ -1,6 +1,5 @@
-const ACLError = require('./ACLError')
-const ACLService = require('./ACLService')
-
+import ACLError from './ACLError.js'
+import ACLService from './ACLService.js'
 class ACLManager {
   constructor () {
     this.log = false
@@ -49,7 +48,7 @@ class ACLManager {
   }
 
   getACLForRole (role) {
-    for (let acl of this.aclList) {
+    for (const acl of this.aclList) {
       if (acl.roleList.includes(role)) {
         return acl
       }
@@ -104,5 +103,4 @@ class ACLManager {
     }
   }
 }
-
-module.exports = ACLManager
+export default ACLManager

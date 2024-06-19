@@ -1,12 +1,20 @@
 {
   "name": "@techteamer/acl",
-  "version": "1.2.1",
+  "version": "1.2.2-alpha",
   "description": "Access Control List (ACL)",
-  "main": "index.js",
+  "main": "dist/cjs/index.js",
+  "module": "dist/mjs/index.js",
+  "exports": {
+    ".": {
+      "import": "./dist/mjs/index.js",
+      "require": "./dist/cjs/index.js"
+    }
+  },
   "scripts": {
     "lint": "eslint .",
     "unit": "mocha --exit",
-    "test": "eslint . && mocha --exit"
+    "test": "eslint . && mocha --exit",
+    "build": "rm -fr dist/* && tsc -p tsconfig.json && tsc -p tsconfig-cjs.json && ./fixup.sh"
   },
   "keywords": [
     "acl"
@@ -21,16 +29,20 @@
     "type": "git",
     "url": "https://github.com/TechTeamer/acl.git"
   },
+  "type": "module",
   "engines": {
-    "node": ">=6"
+    "node": "^18.18.0 || ^20.9.0"
   },
   "devDependencies": {
-    "eslint": "^5.4.0",
-    "eslint-config-standard": "^11.0.0",
-    "eslint-plugin-import": "^2.14.0",
-    "eslint-plugin-node": "^7.0.1",
-    "eslint-plugin-promise": "^4.0.0",
-    "eslint-plugin-standard": "^3.1.0",
-    "mocha": "^5.2.0"
+    "@types/node": "^20.12.12",
+    "eslint": "^8.57.0",
+    "eslint-config-standard": "^17.1.0",
+    "eslint-plugin-import": "^2.29.1",
+    "eslint-plugin-n": "^17.7.0",
+    "eslint-plugin-promise": "^6.1.1",
+    "globals": "^15.3.0",
+    "mocha": "^10.4.0",
+    "typescript": "^5.4.5",
+    "typescript-eslint": "^7.10.0"
   }
 }

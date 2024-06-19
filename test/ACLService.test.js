@@ -1,5 +1,6 @@
-const assert = require('assert')
-const {ACLService, ACLError} = require('./../index')
+import assert from 'assert'
+import { ACLService, ACLError } from '../index.js'
+import { it, describe } from 'mocha'
 const ACL = new ACLService()
 
 describe('Initial types and values', function () {
@@ -38,12 +39,14 @@ describe('ACL.roleList', function () {
 describe('ACL.createRule', function () {
   it('Create new accept rule then check it: \'admin\\users.create\'', function () {
     assert.ok(ACL.createRule('users.create', 'admin'))
-    assert.ok(function () {
-      for (let rule of ACL._ruleCache.get('admin').accept) {
+    assert.ok((function () {
+      for (const rule of ACL._ruleCache.get('admin').accept) {
         if (rule instanceof RegExp &&
-          rule.toString() === /^users\.create$/i.toString()) return true
+                    rule.toString() === /^users\.create$/i.toString()) {
+          return true
+        }
       }
-    }(), 'Created rule not found as a regular expression')
+    }()), 'Created rule not found as a regular expression')
   })
   it('Create new rule with same description throws an error', function () {
     assert.throws(function () {
@@ -62,21 +65,25 @@ describe('ACL.createRule', function () {
   })
   it('Create new accept rule with wildcard character: \'admin\\users.*\'', function () {
     assert.ok(ACL.createRule('users.*', 'admin'))
-    assert.ok(function () {
-      for (let rule of ACL._ruleCache.get('admin').accept) {
+    assert.ok((function () {
+      for (const rule of ACL._ruleCache.get('admin').accept) {
         if (rule instanceof RegExp &&
-          rule.toString() === /^users\..*$/i.toString()) return true
+                    rule.toString() === /^users\..*$/i.toString()) {
+          return true
+        }
       }
-    }(), 'Created rule not found as a regular expression')
+    }()), 'Created rule not found as a regular expression')
   })
   it('Create new reject rule then check it: \'admin\\!users.secret\'', function () {
     assert.ok(ACL.createRule('!users.secret', 'admin'))
-    assert.ok(function () {
-      for (let rule of ACL._ruleCache.get('admin').reject) {
+    assert.ok((function () {
+      for (const rule of ACL._ruleCache.get('admin').reject) {
         if (rule instanceof RegExp &&
-          rule.toString() === /^users\.secret$/i.toString()) return true
+                    rule.toString() === /^users\.secret$/i.toString()) {
+          return true
+        }
       }
-    }(), 'Created rule not found as a regular expression')
+    }()), 'Created rule not found as a regular expression')
   })
 })
 
@@ -92,30 +99,34 @@ describe('ACL.hasRole', function () {
 describe('ACL.import', function () {
   it('Import json role/rule structure (append, without overwrite)', function () {
     assert.doesNotThrow(function () {
-      ACL.import({"supervisor": ["!users.create", "users.secret"]})
+      ACL.import({ supervisor: ['!users.create', 'users.secret'] })
     })
   })
   it('Accept rule created: \'supervisor\\users.secret\'', function () {
     assert.ok(ACL._ruleCache.has('supervisor'))
-    assert.ok(function () {
-      for (let rule of ACL._ruleCache.get('supervisor').accept) {
+    assert.ok((function () {
+      for (const rule of ACL._ruleCache.get('supervisor').accept) {
         if (rule instanceof RegExp &&
-          rule.toString() === /^users\.secret$/i.toString()) return true
+                    rule.toString() === /^users\.secret$/i.toString()) {
+          return true
+        }
       }
-    }(), 'Created rule not found as a regular expression')
+    }()), 'Created rule not found as a regular expression')
   })
   it('Reject rule created: \'supervisor\\!users.create\'', function () {
     assert.ok(ACL._ruleCache.has('supervisor'))
-    assert.ok(function () {
-      for (let rule of ACL._ruleCache.get('supervisor').reject) {
+    assert.ok((function () {
+      for (const rule of ACL._ruleCache.get('supervisor').reject) {
         if (rule instanceof RegExp &&
-          rule.toString() === /^users\.create$/i.toString()) return true
+                    rule.toString() === /^users\.create$/i.toString()) {
+          return true
+        }
       }
-    }(), 'Created rule not found as a regular expression')
+    }()), 'Created rule not found as a regular expression')
   })
   it('Import throw error on duplicate rules', function () {
     assert.throws(function () {
-      ACL.import({"supervisor": ["users.create", "users.secret", "users.create"]})
+      ACL.import({ supervisor: ['users.create', 'users.secret', 'users.create'] })
     })
   })
 })
@@ -171,7 +182,7 @@ describe('ACL.clearResultCache', function () {
   it('ACL result cache is an empty Map object', function () {
     ACL.clearResultCache()
     assert.ok(ACL._resultCache instanceof Map &&
-      ACL._resultCache.size === 0)
+            ACL._resultCache.size === 0)
   })
 })
 
@@ -179,8 +190,8 @@ describe('ACL.clear', function () {
   it('ACL config and result cache are empty Map objects', function () {
     ACL.clear()
     assert.ok(ACL._ruleCache instanceof Map &&
-      ACL._ruleCache.size === 0 &&
-      ACL._resultCache instanceof Map &&
-      ACL._resultCache.size === 0)
+            ACL._ruleCache.size === 0 &&
+            ACL._resultCache instanceof Map &&
+            ACL._resultCache.size === 0)
   })
 })

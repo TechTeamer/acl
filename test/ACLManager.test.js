@@ -1,38 +1,38 @@
-const assert = require('assert')
-const { ACLManager, ACLService } = require('./../index')
+import assert from 'assert'
+import { ACLManager, ACLService } from '../index.js'
+import { it, describe } from 'mocha'
 const acl1 = new ACLService()
 const acl2 = new ACLService()
 let acm
 
 // Lowest ACL level
 const acl0Config = {
-  "admin": [ // We will never get here
-    "*"
+  admin: [ // We will never get here
+    '*'
   ],
-  "operator": [  // Falls back here from acl2 then acl1
-    "calls.accept"
+  operator: [ // Falls back here from acl2 then acl1
+    'calls.accept'
   ]
 }
-
 // Lower precedence ACL
 acl1.import({
-  "admin": [ // We will never get here
-    "users.*",
-    "system.*"
+  admin: [ // We will never get here
+    'users.*',
+    'system.*'
   ],
-  "supervisor": [ // Falls back here from acl2
-    "users.*",
-    "!users.delete",
-    "system.*",
-    "!system.shutdown",
-    "@ignored"
+  supervisor: [ // Falls back here from acl2
+    'users.*',
+    '!users.delete',
+    'system.*',
+    '!system.shutdown',
+    '@ignored'
   ]
 })
 
 // Higher precedence ACL
 acl2.import({
-  "admin": [
-    "users.*",
+  admin: [
+    'users.*'
   ]
 })
 
@@ -155,7 +155,6 @@ describe('ACLManager.anyAllowed', function () {
     assert.ok(!acm.anyAllowed([], 'admin'))
   })
 })
-
 describe('ACLManager.clear', function () {
   it('Clears ACL instances from manager', function () {
     acm.clear()
