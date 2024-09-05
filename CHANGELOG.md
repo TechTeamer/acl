@@ -1,4 +1,4 @@
-# [2.0.0](https://github.com/TechTeamer/mq/compare/1.2.1...2.0.0) (2024-09-05)
+# [2.0.0](https://github.com/TechTeamer/acl/compare/1.2.1...2.0.0) (2024-09-05)
 
 - [FKITDEV-3756](https://youtrack.techteamer.com/issue/FKITDEV-3756) Esm migration
 
