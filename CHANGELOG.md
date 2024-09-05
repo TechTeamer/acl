@@ -1,0 +1,7 @@
+# [2.0.0](https://github.com/TechTeamer/mq/compare/1.2.1...2.0.0) (2024-09-05)
+
+- [FKITDEV-3756](https://youtrack.techteamer.com/issue/FKITDEV-3756) Esm migration
+
+### BREAKING CHANGES
+
+- **deps:** bump minimum node to: ^18.18.0 or ^20.9.0"
